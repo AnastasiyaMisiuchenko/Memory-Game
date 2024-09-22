@@ -1,4 +1,5 @@
 class GameScene extends Phaser.Scene{
+
     constructor() {
         super("Game");
     }
@@ -26,9 +27,9 @@ class GameScene extends Phaser.Scene{
         });
     }
 
-    createAttempts(){
+    changeAttempts(){
         this.attemptsText.setText("Attempts: " + this.attempts);
-        ++this.attempts; //+= press;
+        ++this.attempts;
     }
 
     onTimerTick(){
@@ -52,12 +53,14 @@ class GameScene extends Phaser.Scene{
     }
     create(){
         this.timeout = config.timeout
-        this.attempts = config.attempts;
+
+        this.attempts = 0;
+        this.arr_tweens = [];
+
         this.createTimer();
         this.createBackground();
         this.createText();
         this.createCards();
-        this.createAttempts();
         this.start();
 
     }
@@ -83,12 +86,13 @@ class GameScene extends Phaser.Scene{
     start(){
         this.initCardPositions();
         this.timeout = config.timeout;
-        this.attempts = config.attempts;
+        this.attempts = 0;
         this.openedCard = null;
         this.openedCardsCount = 0;
         this.timer.paused = false;
         this.initCards();
         this.showCards();
+        this.changeAttempts();
     }
 
     initCards(){
@@ -100,6 +104,12 @@ class GameScene extends Phaser.Scene{
     }
 
     showCards(){
+
+        for (let i = 0; i < this.arr_tweens.length; i++) {
+            this.tweens.remove(this.arr_tweens[i]);
+        }
+        this.arr_tweens = [];
+
         this.cards.forEach(card => {
             card.deph = card.position.delay;
             card.move({
@@ -125,19 +135,19 @@ class GameScene extends Phaser.Scene{
     }
 
     onCardClicked(pointer, card){
-        this.createAttempts();
+        this.changeAttempts();
 
         if(card.opened){
             return false;
         }
         if (this.openedCard){
             if (this.openedCard.value === card.value){
-                //картинки равны
+
+                this.openedCard.increase();
+                card.increase();
 
                 this.openedCard = null;
                 ++this.openedCardsCount;
-
-                //openedCard.increase();
 
             } else{
                 this.openedCard.close();

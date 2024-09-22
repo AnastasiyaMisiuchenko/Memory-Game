@@ -15,7 +15,7 @@ class Card extends Phaser.GameObjects.Sprite{
     }
 
     move(params){
-        this.scene.tweens.add({
+        let tween = this.scene.tweens.add({
             targets: this,
             x: params.x,
             y: params.y,
@@ -28,18 +28,22 @@ class Card extends Phaser.GameObjects.Sprite{
                 }
             }
         });
+
+        if(!this.scene.arr_tweens) this.scene.arr_tweens = [];
+        this.scene.arr_tweens.push(tween);
     }
 
     increase(){
-        this.scene.tweens.add({
+        let tween = this.scene.tweens.add({
             targets: this,
             scaleX: 1.2,
             scaleY: 1.2,
-            duration: 500,
+            duration: 150,
             yoyo: true,
             ease: 'Power',
-            hold: 500
+            hold: 100
         });
+        //this.scene.arr_tweens.push(tween);
     }
 
     flip(callback){

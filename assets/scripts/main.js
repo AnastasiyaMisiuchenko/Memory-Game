@@ -6,7 +6,6 @@ let config = {
     cols: 5,
     cards: [1, 2, 3, 4, 5],
     timeout: 30,
-    attempts: 0,
     scene: new GameScene()
 };
 
